@@ -4,7 +4,14 @@ import stepperReducer from './StepperSlice';
 export const store = configureStore({
   reducer: {
     stepper: stepperReducer
-  }
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['stepper/fillForm'],
+        ignoredPaths: ['stepper.upload'],
+      },
+    }),
 })
 
 

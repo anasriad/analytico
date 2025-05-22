@@ -1,7 +1,7 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { fillForm, nextStep } from "@/app/States/StepperSlice";
+import { fillForm, nextStep, previousStep } from "@/app/States/StepperSlice";
 import { RootState } from "@/app/States/Store";
 
 const ModelSelection = () => {
@@ -41,24 +41,26 @@ const ModelSelection = () => {
         if (selectedType === "CSV" || selectedType === "JSON") {
             return (
                 <>
-                    <button
-                        onClick={() => handleSelectModel("Linear Regression")}
-                        className="bg-black bg-opacity-70 p-4 rounded-xl text-center hover:bg-green-700 transition-all shadow-lg shadow-green-500"
-                    >
-                        Linear Regression
-                    </button>
-                    <button
-                        onClick={() => handleSelectModel("Decision Tree")}
-                        className="bg-black bg-opacity-70 p-4 rounded-xl text-center hover:bg-green-700 transition-all shadow-lg shadow-green-500"
-                    >
-                        Decision Tree
-                    </button>
-                    <button
-                        onClick={() => handleSelectModel("Random Forest")}
-                        className="bg-black bg-opacity-70 p-4 rounded-xl text-center hover:bg-green-700 transition-all shadow-lg shadow-green-500"
-                    >
-                        Random Forest
-                    </button>
+                    <div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-40">
+                            {["Linear Regression", "Decision Tree"].map(
+                                (type) => (
+                                    <button
+                                        key={type}
+                                        onClick={() => handleSelectModel(type)}
+                                        className={`${selectedType === type
+                                            ? "bg-green-700 shadow-green-500"
+                                            : "bg-black bg-opacity-70"
+                                            } 
+                                            p-4 rounded-xl text-center hover:bg-green-700 
+                                            transition-all shadow-lg w-36`}
+                                    >
+                                        {type}
+                                    </button>
+                                )
+                            )}
+                        </div>
+                    </div>
                 </>
             );
         }
@@ -79,14 +81,18 @@ const ModelSelection = () => {
             </div>
             <div className="flex justify-between mt-8 w-full max-w-4xl">
                 <button
-                    disabled
-                    className="bg-gray-700 text-gray-400 px-6 py-3 rounded-2xl cursor-not-allowed"
+                    onClick={() => Dispatch(previousStep())}
+                    className="bg-black text-white hover:bg-green-700 shadow-xl shadow-green-500 px-6 py-3 rounded-2xl transition-all"
                 >
                     Previous
                 </button>
                 <button
                     onClick={() => Dispatch(nextStep())}
-                    className="bg-black text-white hover:bg-green-700 shadow-xl shadow-green-500 px-6 py-3 rounded-2xl transition-all"
+                    className={`${selectedType
+                        ? "bg-black text-white hover:bg-green-700 shadow-xl shadow-green-500 border"
+                        : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        } px-6 py-3 rounded-2xl transition-all`}
+                    disabled={!selectedType}
                 >
                     Next
                 </button>
